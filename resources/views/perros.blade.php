@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Inicio</title>
+        <!-- Required meta tags -->
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
+
+        <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+        <!-- Bootstrap CSS v5.2.1 -->
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+            crossorigin="anonymous"
+        />
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    </head>
+
+    <body>
+        <header>
+            <!-- place navbar here -->
+            <nav
+                class="navbar navbar-expand-sm navbar-light bg-light"
+            >
+                <div class="container">
+                    <a class="navbar-brand" href="#">Mascotas</a>
+                    <button
+                        class="navbar-toggler d-lg-none"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapsibleNavId"
+                        aria-controls="collapsibleNavId"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation"
+                    >
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="collapsibleNavId">
+                        <ul class="navbar-nav me-auto mt-2 mt-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="{{route('inicioruta')}}" aria-current="page"
+                                    >Clientes
+                                    <span class="visually-hidden">(current)</span></a
+                                >
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Mascotas</a>
+                            </li>
+
+                        </ul>
+                        <form class="d-flex my-2 my-lg-0">
+                            <input
+                                class="form-control me-sm-2"
+                                type="text"
+                                placeholder="Search"
+                            />
+                            <button
+                                class="btn btn-outline-success my-2 my-sm-0"
+                                type="submit"
+                            >
+                                Buscar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </nav>
+
+        </header>
+        <main>
+            <div class="container d-flex justify-content-end mt-3">
+                <!-- Modal trigger button -->
+            <button
+            type="button"
+            class="btn btn-primary btn-lg"
+            data-bs-toggle="modal"
+            data-bs-target="#modalId"
+        >
+        <i class="bi bi-plus-lg"></i>
+
+        </button>
+
+        <!-- Modal Body -->
+        <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
+        <div
+            class="modal fade"
+            id="modalId"
+            tabindex="-1"
+
+
+            role="dialog"
+            aria-labelledby="modalTitleId"
+            aria-hidden="true"
+        >
+            <div
+                class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm"
+                role="document"
+            >
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Datos</h3>
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+
+                    <form action="{{route('perro.nuevo')}}" method="POST">
+                        @csrf
+                        <div class="container">
+                                <select name="dueno" id="dueno" class="form-control my-2"> 
+                                    @foreach ($personas as $persona)
+                                        <option value="{{$persona->nombre}}">{{$persona->nombre}}</option>
+                                    @endforeach
+                                </select>
+                            <label for="" class="mx-3 mt-2">Nombre</label>
+                            <input type="text" name="nombre" id="" class="form-control my-2">
+                            <label for="" class="mx-3">Dirección</label>
+                            <input type="text" name="direccion" id="" class="form-control my-2">
+                            <label for="" class="mx-3">Raza</label>
+                            <input type="text" name="raza" id="" class="form-control my-2">
+                            <label for="" class="mx-3">Color</label>
+                            <input type="text" name="color" id="" class="form-control my-2">
+                            <label for="" class="mx-3">Edad</label>
+                            <input type="text" name="edad" id="" class="form-control my-2">
+                            <div class="container d-flex justify-content-center">
+                                <button type="submit" class="btn btn-success my-3">Enviar</button>
+                            </div>
+
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button
+                            type="button"
+                            class="btn btn-danger"
+                            data-bs-dismiss="modal"
+                        >
+                            Cancelar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+            </div>
+
+            <div id="info" class="container mt-5">
+                <h2>Mascotas</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Dueño</th>
+                            <th scope="col">Id</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Raza</th>
+                            <th scope="col">Edad</th>
+                            <th scope="col">Dirección</th>
+                            <th scope="col">Color</th>
+                            <th>Edicion</th>
+                        </tr>
+                    </thead>
+                    <tbody id="carrito-body">
+                        @if($perros->isEmpty())
+                            <tr>
+                                <td colspan="8">No hay datos en la base de datos.</td>
+                            </tr>
+                        @else
+                            @foreach ($perros as $perro)
+                                <tr>
+                                    <td>{{$perro->dueno}}</td>
+                                    <td>{{$perro->id}}</td>
+                                    <td>{{$perro->nombre}}</td>
+                                    <td>{{$perro->raza}}</td>
+                                    <td>{{$perro->edad}}</td>
+                                    <td>{{$perro->direccion}}</td>
+                                    <td>{{$perro->color}}</td>
+                                    <td class="d-flex">
+                                        <form action="{{ route('perro.editar', $perro->id) }}" method="POST">
+                                            <button type="button" class="btn btn-primary mx-2" onclick="editar('{{$perro->dueno}}', '{{ $perro->id }}', '{{ $perro->nombre }}', '{{ $perro->direccion }}', '{{$perro->color}}', '{{$perro->raza}}', '{{$perro->edad}}')">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </button>
+                                        </form>             
+                                        <form action="{{ route('perro.eliminar', $perro->id) }}" method="GET">
+                                            @csrf
+                                            <button type="submit" class="btn btn-danger">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @endif
+                    </tbody>
+
+
+                </table>
+            </div>
+
+            <!-- Modal trigger button -->
+
+            <!-- Modal Body -->
+            <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
+            <div
+                class="modal fade"
+                id="modalIdEditar"
+                tabindex="-1"
+
+
+                role="dialog"
+                aria-labelledby="modalTitleId"
+                aria-hidden="true"
+            >
+                <div
+                    class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm"
+                    role="document"
+                >
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalTitleId">
+                                Información mascotas
+                            </h5>
+                            <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                            ></button>
+                        </div>
+
+                        <form action="{{ route('perro.editar', $perro->id) }}" method="POST">
+                            @csrf
+                            <div class="container">
+                                <label for="" class="mx-3 mt-2">Dueño</label>
+                                <select name="dueno" id="dueno" class="form-control my-2">
+                                    @foreach ($personas as $persona)
+                                        @if ($persona->nombre == $perro->dueno)
+                                            <option value="{{$persona->nombre}}" selected>{{$persona->nombre}}</option>
+                                        @else
+                                            <option value="{{$persona->nombre}}">{{$persona->nombre}}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+
+
+
+                                <label for="" class="mx-3 mt-2">Nombre</label>
+                                <input type="number" name="id" id="id" readonly style="display: none">
+                                <input type="text" name="nombre" id="editarNombre" class="form-control my-2">
+                                <label for="" class="mx-3">Dirección</label>
+                                <input type="text" name="direccion" id="editarDireccion" class="form-control my-2">
+                                <label for="" class="mx-3">Raza</label>
+                                <input type="text" name="raza" id="editarRaza" class="form-control my-2">
+                                <label for="" class="mx-3">Color</label>
+                                <input type="text" name="color" id="editarColor" class="form-control my-2">
+                                <label for="" class="mx-3">Edad</label>
+                                <input type="text" name="edad" id="editarEdad" class="form-control my-2">
+
+                                <div class="container d-flex justify-content-center">
+                                    <button type="submit" class="btn btn-success my-3">Actualizar</button>
+                                </div>
+                            </div>
+                        </form>
+
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Optional: Place to the bottom of scripts -->
+            <script>
+                const myModal = new bootstrap.Modal(
+                    document.getElementById("modalIdEditar"),
+                    options,
+                );
+            </script>
+
+
+            <!-- Optional: Place to the bottom of scripts -->
+
+
+            <script>
+                function editar(dueno, id, nombre, direccion, descripcion, raza, edad) {
+                    
+                    $('#editarNombre').val(nombre);
+                    $('#editarDireccion').val(direccion);
+                    $('#editarRaza').val(raza);
+                    $('#editarEdad').val(edad);
+                    $('#editarColor').val(descripcion);
+                    $('#id').val(id);
+                    if (id) {
+                        $('#formEditarPerro').attr('action', '{{ route("perro.editar", ":id") }}'.replace(':id', id)); // Asignar la ruta correcta con el ID de la persona
+                        $('#modalIdEditar').modal('show');
+                    } else {
+                        console.error('ID inválido');
+                    }
+                }
+            </script>
+            
+        </main>
+        <footer>
+            <!-- place footer here -->
+        </footer>
+        <!-- Bootstrap JavaScript Libraries -->
+        <script
+            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+            integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+            integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+            crossorigin="anonymous"
+        ></script>
+    </body>
+</html>
